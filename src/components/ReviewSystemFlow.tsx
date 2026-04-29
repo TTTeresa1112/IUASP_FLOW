@@ -87,17 +87,7 @@ const initialNodes: Node[] = [
     },
     extent: 'parent',
   },
-  {
-    id: 'node-1-5',
-    type: 'process',
-    parentId: 'phase-1',
-    position: { x: 70, y: 560 },
-    data: { 
-      label: 'ME阶段确认', role: 'ME', icon: 'check', 
-      isOA: true, initiator: '学术编辑 (AE)', nextStep: '进入同行评议阶段', passRole: '同行评议系统', rejectStep: '异常,退回主编', reviseStep: '退回至 AE' 
-    },
-    extent: 'parent',
-  },
+
 
   // --- 第二阶段：同行评议 ---
   {
@@ -210,15 +200,27 @@ const initialEdges: Edge[] = [
   { id: 'e1-1-2', source: 'node-1-1', sourceHandle: 'bottom', target: 'node-1-2', targetHandle: 'top', type: 'smoothstep' },
   { id: 'e1-2-3', source: 'node-1-2', sourceHandle: 'bottom', target: 'node-1-3', targetHandle: 'top', type: 'smoothstep' },
   { id: 'e1-3-4', source: 'node-1-3', sourceHandle: 'bottom', target: 'node-1-4', targetHandle: 'top', type: 'smoothstep' },
-  { id: 'e1-4-5', source: 'node-1-4', sourceHandle: 'bottom', target: 'node-1-5', targetHandle: 'top', type: 'smoothstep' },
   
   // Connect Phase 1 to Phase 2
   { 
     id: 'e1-p2', 
-    source: 'node-1-5', 
+    source: 'node-1-2', 
     sourceHandle: 'right',
     target: 'node-2-1', 
     targetHandle: 'left',
+    type: 'smoothstep',
+    animated: true,
+    style: { stroke: '#6366f1', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1' } 
+  },
+
+  // ME审查直接到阶段三系统分发
+  { 
+    id: 'e1-2-p3', 
+    source: 'node-1-2', 
+    sourceHandle: 'right',
+    target: 'node-3-decision', 
+    targetHandle: 'top',
     type: 'smoothstep',
     animated: true,
     style: { stroke: '#6366f1', strokeWidth: 2 },

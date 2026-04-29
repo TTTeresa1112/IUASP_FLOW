@@ -224,12 +224,12 @@ const pmConfig: Record<string, NodeConfig> = {
         { id: 'n8', position: { x: 1400, y: 138 }, type: 'miniNode', data: { actorLabel: '发起人', actor: '主编', actionLabel: '分配 AE', currentStatus: '[主编初审] 等待分配 AE', isCurrent: true } },
         { id: 'n5', position: { x: 1150, y: -10 }, type: 'miniNode', data: { actorLabel: '状态', actor: '系统归档', actionLabel: '系统归档', currentStatus: '', borderColor: 'red', showAction: false } },
         { id: 'n100', position: { x: 850, y: 300 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '确认 / 退回主编重新做决定', currentStatus: '[编辑部ME审核] 确认主编初审意见中' } },
-        { id: 'n3', position: { x: 1150, y: 309 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '作者', actionLabel: '初审返修', currentStatus: '[作者初审返修中] 初审返修中（ME）' } },
-        { id: 'n6', position: { x: 1500, y: 340 }, type: 'miniNode', data: { actorLabel: '状态', actor: '提交稿件', actionLabel: '提交稿件', currentStatus: '', borderColor: 'white', showBottomHandle: true, showAction: false } },
+        { id: 'n3', position: { x: 1500, y: 309 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '作者', actionLabel: '初审返修', currentStatus: '[作者初审返修中] 初审返修中（ME）', showBottomHandle: true } },
+        { id: 'n6', position: { x: 1150, y: 340 }, type: 'miniNode', data: { actorLabel: '状态', actor: '提交稿件', actionLabel: '提交稿件', currentStatus: '', borderColor: 'white', showBottomHandle: true, showAction: false } },
         { id: 'n11', position: { x: 500, y: 172 }, type: 'miniNode', data: { actorLabel: '状态', actor: 'ME 审查', actionLabel: 'ME 查', currentStatus: '', borderColor: 'green', showAction: false } },
         { id: 'n12', position: { x: -300, y: 172 }, type: 'miniNode', data: { actorLabel: '状态', actor: 'ME审查', actionLabel: 'ME审查', currentStatus: '', borderColor: 'green', showAction: false } },   
         { id: 'n20', position: { x: 2200, y: 170 }, type: 'miniNode', data: { actorLabel: '状态', actor: '学术编辑初审', actionLabel: '学术编辑初审', currentStatus: '', borderColor: 'purple', showAction: false } }, 
-        { id: 'n21', position: { x: 2450, y: 130 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '学术编辑', actionLabel: '确认 / 退回主编重新做决定', currentStatus: '[AE初审] AE 确认同意初审中' } },   
+        { id: 'n21', position: { x: 2450, y: 130 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '学术编辑', actionLabel: '确认 / 退回主编重新做决定', currentStatus: '[AE初审] AE 确认同意初审中' } },  
       ],
       edges: [
         { id: 'e3', source: 'n4', target: 'n1'},
@@ -238,7 +238,6 @@ const pmConfig: Record<string, NodeConfig> = {
         { id: 'e10', source: 'n7', target: 'n13'},
         { id: 'e4', source: 'n1', target: 'n11'},
         { id: 'e2', source: 'n11', target: 'n100', label: '需要初审返修' },
-        { id: 'e5', source: 'n3', target: 'n6', label: '完成返修' },
         { id: 'e8', source: 'n2', target: 'n5', label: '确认' },
         { id: 'e9', source: 'n12', target: 'n4'},
         { id: 'e11', source: 'n13', target: 'n8'},
@@ -247,7 +246,7 @@ const pmConfig: Record<string, NodeConfig> = {
         { id: 'e14', source: 'n18', target: 'n20'},
         { id: 'e15', source: 'n20', target: 'n21'},
         { id: 'e16', source: 'n100', target: 'n3'},
-        { id: 'e6', source: 'n6', target: 'n12', label: '重新提交', sourceHandle: 'bottom' }
+        { id: 'e6', source: 'n3', target: 'n12', label: '重新提交', sourceHandle: 'bottom' }
       ]
     }
   },
@@ -282,14 +281,24 @@ const pmConfig: Record<string, NodeConfig> = {
         { id: 'n4', position: { x: 1000, y: 130 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '确认 / 退回AE重新做决定', currentStatus: '[编辑部ME审核] 确认AE初审意见中' } },
         { id: 'n5', position: { x: 1000, y: 380 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '确认 / 退回AE重新做决定', currentStatus: '[编辑部ME审核] 确认AE初审意见中' } },
         { id: 'n6', position: { x: 1000, y: -100 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '确认 / 退回AE重新做决定', currentStatus: '[编辑部ME审核] 确认AE初审意见中' } },
-        { id: 'n7', position: { x: 1280, y: -60 }, type: 'miniNode', data: { actorLabel: '状态', actor: '主编审查', actionLabel: '主编初审', currentStatus: '', borderColor: 'orange', showAction: false } },    
+        { id: 'n7', position: { x: 1280, y: -60 }, type: 'miniNode', data: { actorLabel: '状态', actor: '主编审查', actionLabel: '主编初审', currentStatus: '', borderColor: 'orange', showAction: false } },
+        { id: 'n8', position: { x: 1600, y: -130 }, type: 'miniNode', data: { actorLabel: '状态', actor: '系统归档', actionLabel: '系统归档', currentStatus: '', borderColor: 'red', showAction: false } }, 
+        { id: 'n9', position: { x: 1600, y: 10 }, type: 'miniNode', data: { actorLabel: '状态', actor: '提交稿件', actionLabel: '提交稿件', currentStatus: '', borderColor: 'white', showBottomHandle: true, showAction: false } },
+        { id: 'n10', position: { x: 1600, y: -60 }, type: 'miniNode', data: { actorLabel: '状态', actor: '学术编辑初审', actionLabel: '学术编辑初审', currentStatus: '', borderColor: 'purple', showAction: false } },
+        { id: 'n11', position: { x: 1280, y: 170 }, type: 'miniNode', data: { actorLabel: '状态', actor: '选择审稿人', actionLabel: '选择审稿人', currentStatus: '', borderColor: 'purple', showAction: false } },
+
       ],
       edges: [
         { id: 'e1', source: 'n1', target: 'n2'},
         { id: 'e2', source: 'n2', target: 'n3'},
         { id: 'e3', source: 'n3', target: 'n4', label: '进入同行评议' },
         { id: 'e4', source: 'n3', target: 'n5', label: '需要初审返修' },
-        { id: 'e5', source: 'n3', target: 'n6', label: '初审拒稿' }
+        { id: 'e5', source: 'n3', target: 'n6', label: '初审拒稿' },
+        { id: 'e6', source: 'n6', target: 'n7'},
+        { id: 'e7', source: 'n7', target: 'n8'},
+        { id: 'e8', source: 'n7', target: 'n9'},
+        { id: 'e9', source: 'n7', target: 'n10'},
+        { id: 'e10', source: 'n4', target: 'n11'},
       ]
     }
   },
