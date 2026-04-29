@@ -11,6 +11,7 @@ export function ReviewerNode({ data, selected }: any) {
       )}
     >
       <Handle type="target" position={Position.Top} id="top" className="!w-2 !h-2 !bg-slate-300" />
+      <Handle type="target" position={Position.Left} id="left" className="!w-2 !h-2 !bg-slate-300" />
       
       <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
         <UserCheck size={16} />
@@ -21,6 +22,7 @@ export function ReviewerNode({ data, selected }: any) {
       </div>
 
       <Handle type="source" position={Position.Bottom} id="bottom" className="!w-2 !h-2 !bg-slate-300" />
+      <Handle type="source" position={Position.Right} id="right" className="!w-2 !h-2 !bg-slate-300" />
     </div>
   );
 }

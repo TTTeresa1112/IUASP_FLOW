@@ -40,7 +40,7 @@ export function ProcessNode({ data, selected }: any) {
       )}
     >
       <Handle type="target" position={Position.Top} id="top" className="!w-2 !h-2 !bg-slate-400" />
-      <Handle type="target" position={Position.Left} id="left" className="!opacity-0" />
+      <Handle type="target" position={Position.Left} id="left" className="!w-2 !h-2 !bg-slate-400" />
 
       <div className="flex items-center gap-2">
         <div className="p-1 rounded bg-white/50">

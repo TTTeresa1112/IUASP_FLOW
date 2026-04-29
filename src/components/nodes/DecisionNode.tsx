@@ -36,24 +36,39 @@ export function DecisionNode({ data, selected }: any) {
       {/* Source handles */}
       <Handle 
         type="source" 
+        position={Position.Top} 
+        id="top"
+        className="!w-2 !h-2 !bg-slate-400 !top-0 !left-1/2 -translate-x-1/2 -translate-y-1/2 !border-none" 
+      />
+      
+      <Handle 
+        type="source" 
         position={Position.Bottom} 
-        id="bottom-left"
-        className="!w-2 !h-2 !bg-green-500 !left-1/4 !top-3/4 -translate-x-1/2 -translate-y-1/2 !border-none" 
+        id="bottom"
+        className="!w-2 !h-2 !bg-slate-400 !left-1/2 !top-full -translate-x-1/2 -translate-y-1/2 !border-none" 
+      />
+      
+      <Handle 
+        type="source" 
+        position={Position.Left} 
+        id="left"
+        className="!w-2 !h-2 !bg-slate-400 !left-0 !top-1/2 -translate-x-1/2 -translate-y-1/2 !border-none" 
+      />
+      
+      <Handle 
+        type="source" 
+        position={Position.Right} 
+        id="right"
+        className="!w-2 !h-2 !bg-slate-400 !left-full !top-1/2 -translate-x-1/2 -translate-y-1/2 !border-none" 
       />
       
       <Handle 
         type="source" 
         position={Position.Bottom} 
         id="bottom-center"
-        className="!w-2 !h-2 !bg-slate-500 !left-1/2 !top-full -translate-x-1/2 -translate-y-1/2 !border-none" 
+        className="!w-2 !h-2 !bg-slate-400 !left-1/2 !top-full -translate-x-1/2 -translate-y-1/2 !border-none" 
       />
-      
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        id="bottom-right"
-        className="!w-2 !h-2 !bg-red-500 !left-3/4 !top-3/4 -translate-x-1/2 -translate-y-1/2 !border-none" 
-      />
+
     </div>
   );
 }

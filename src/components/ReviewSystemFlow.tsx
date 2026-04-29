@@ -36,6 +36,27 @@ const nodeTypes = {
 };
 
 const initialNodes: Node[] = [
+  // --- 第零阶段：提交阶段 ---
+  // 提交阶段位于初审阶段之前，用于处理作者提交稿件流程
+  // 使用灰色边框区别于其他阶段
+  {
+    id: 'phase-0',
+    type: 'phase',
+    position: { x: 50, y: -200 },
+    data: { label: '提交阶段', index: -1, isExpanded: true },
+    style: { width: 340, height: 200, zIndex: -1 },
+    draggable: false,
+  },
+  // 提交稿件节点 - 作者提交新稿件或返修稿件
+  {
+    id: 'node-0-1',
+    type: 'process',
+    parentId: 'phase-0',
+    position: { x: 70, y: 80 },
+    data: { label: '提交稿件', role: '作者', icon: 'user' },
+    extent: 'parent',
+  },
+
   // --- 第一阶段：初审 ---
   {
     id: 'phase-1',
@@ -46,21 +67,13 @@ const initialNodes: Node[] = [
     draggable: false,
   },
   {
-    id: 'node-1-1',
-    type: 'process',
-    parentId: 'phase-1',
-    position: { x: 70, y: 80 },
-    data: { label: '提交稿件', role: '作者', icon: 'user' },
-    extent: 'parent',
-  },
-  {
     id: 'node-1-2',
     type: 'process',
     parentId: 'phase-1',
-    position: { x: 70, y: 200 },
+    position: { x: 70, y: 80 },
     data: { 
       label: 'ME审查', role: 'ME', icon: 'search', 
-      isOA: true, initiator: '作者', nextStep: '分配主编并进入主编初审', passRole: '主编, 作者', rejectStep: '终审决策 (主编)', reviseStep: '退回给作者' 
+      isOA: true, initiator: '作者', nextStep: '分配主编并进入EIC初审', passRole: '主编, 作者', rejectStep: '终审决策 (主编)', reviseStep: '退回给作者' 
     },
     extent: 'parent',
   },
@@ -68,11 +81,30 @@ const initialNodes: Node[] = [
     id: 'node-1-3',
     type: 'process',
     parentId: 'phase-1',
-    position: { x: 70, y: 320 },
+    position: { x: 70, y: 200 },
     data: { 
-      label: '主编初审', role: 'EiC', icon: 'check', 
+      label: 'EIC初审', role: 'EiC', icon: 'check', 
       isOA: true, initiator: '管理编辑 (ME)', nextStep: '分配学术编辑并开始初审', passRole: '学术编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 ME / 作者' 
     },
+    extent: 'parent',
+  },
+  {
+    id: 'node-1-optional',
+    type: 'optionalGroup',
+    parentId: 'phase-1',
+    position: { x: 50, y: 305 },
+    data: { label: '可跳过' },
+    style: { width: 240, height: 210, zIndex: -1 },
+    draggable: false,
+    selectable: false,
+    extent: 'parent',
+  },
+  {
+    id: 'node-1-1',
+    type: 'process',
+    parentId: 'phase-1',
+    position: { x: 70, y: 320 },
+    data: { label: '提交返修稿件', role: '作者', icon: 'user' },
     extent: 'parent',
   },
   {
@@ -82,8 +114,7 @@ const initialNodes: Node[] = [
     position: { x: 70, y: 440 },
     data: {
       label: '学术编辑初审', role: 'AE', icon: 'search',
-      isOA: true, initiator: '主编 (EiC)', nextStep: 'ME跨段审批', passRole: '管理编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 作者',
-      optional: true
+      isOA: true, initiator: '主编 (EiC)', nextStep: 'ME跨段审批', passRole: '管理编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 作者'
     },
     extent: 'parent',
   },
@@ -104,24 +135,16 @@ const initialNodes: Node[] = [
     parentId: 'phase-2',
     position: { x: 50, y: 65 },
     data: { label: '可跳过' },
-    style: { width: 240, height: 330, zIndex: -1 },
+    style: { width: 240, height: 460, zIndex: -1 },
     draggable: false,
     selectable: false,
-    extent: 'parent',
-  },
-  {
-    id: 'node-2-1',
-    type: 'process',
-    parentId: 'phase-2',
-    position: { x: 70, y: 80 },
-    data: { label: '选择审稿人', role: 'AE', icon: 'search' },
     extent: 'parent',
   },
   {
     id: 'node-2-r',
     type: 'reviewer',
     parentId: 'phase-2',
-    position: { x: 70, y: 200 },
+    position: { x: 70, y: 83 },
     data: { label: '收集审稿意见' },
     extent: 'parent',
   },
@@ -129,8 +152,19 @@ const initialNodes: Node[] = [
     id: 'node-2-3',
     type: 'process',
     parentId: 'phase-2',
-    position: { x: 70, y: 320 },
+    position: { x: 70, y: 190 },
     data: { label: '汇总审稿意见', role: 'AE', icon: 'book' },
+    extent: 'parent',
+  },
+  {
+    id: 'node-2-6',
+    type: 'process',
+    parentId: 'phase-2',
+    position: { x: 70, y: 310 },
+    data: { 
+      label: 'ME审查', role: 'ME', icon: 'search', 
+      isOA: true, initiator: '作者', nextStep: '分配主编并进入EIC初审', passRole: '主编, 作者', rejectStep: '终审决策 (主编)', reviseStep: '退回给作者' 
+    },
     extent: 'parent',
   },
   {
@@ -154,34 +188,26 @@ const initialNodes: Node[] = [
   {
     id: 'phase-3',
     type: 'phase',
-    position: { x: 830, y: 50 },
+    position: { x: 830, y: 40 },
     data: { label: '归档阶段', index: 2, isExpanded: true },
-    style: { width: 760, height: 750, zIndex: -1 },
+    style: { width: 760, height: 430, zIndex: -1 },
     draggable: false,
   },
   {
     id: 'node-3-decision',
     type: 'decision',
     parentId: 'phase-3',
-    position: { x: 312, y: 70 },
+    position: { x: 312, y: 50 },
     data: { label: '系统归档分发' },
     extent: 'parent',
   },
 
   // --- 结论 ---
   {
-    id: 'node-outcome-accept',
-    type: 'process',
-    parentId: 'phase-3',
-    position: { x: 50, y: 320 },
-    data: { label: '录用待刊', role: 'System', icon: 'check' },
-    extent: 'parent',
-  },
-  {
     id: 'node-outcome-reject',
     type: 'process',
     parentId: 'phase-3',
-    position: { x: 510, y: 320 },
+    position: { x: 50, y: 260 },
     data: { label: '稿件拒录', role: 'System', icon: 'clock' },
     extent: 'parent',
   },
@@ -189,48 +215,122 @@ const initialNodes: Node[] = [
     id: 'node-outcome-withdraw',
     type: 'process',
     parentId: 'phase-3',
-    position: { x: 280, y: 320 },
-    data: { label: '稿件撤销', role: 'System', icon: 'clock' },
+    position: { x: 510, y: 260 },
+    data: { label: '稿件撤销', role: 'System', icon: 'check' },
+    extent: 'parent',
+  },
+  {
+    id: 'node-outcome-accept',
+    type: 'process',
+    parentId: 'phase-3',
+    position: { x: 280, y: 260 },
+    data: { label: '稿件录用', role: 'System', icon: 'clock' },
+    extent: 'parent',
+  },
+  {
+    id: 'node-3-r',
+    type: 'reviewer',
+    parentId: 'phase-3',
+    position: { x: 280, y: 360 },
+    data: { label: '获得售后意见' },
+    extent: 'parent',
+  },
+  
+
+  // --- 第四阶段：售后阶段 ---
+  {
+    id: 'phase-4',
+    type: 'phase',
+    position: { x: 830, y: 500 },
+    data: { label: '售后阶段', index: 3, isExpanded: true },
+    style: { width: 760, height: 300, zIndex: -1 },
+    draggable: false,
+  },
+  {
+    id: 'node-4-1',
+    type: 'process',
+    parentId: 'phase-4',
+    position: { x: 50, y: 115 },
+    data: { 
+      label: 'ME审查', role: 'ME', icon: 'search', 
+      isOA: true, initiator: '作者', nextStep: '分配主编并进入EIC初审', passRole: '主编, 作者', rejectStep: '终审决策 (主编)', reviseStep: '退回给作者' 
+    },
+    extent: 'parent',
+  },
+  {
+    id: 'node-4-2',
+    type: 'process',
+    parentId: 'phase-4',
+    position: { x: 50, y: 220 },
+    data: { 
+      label: 'EIC初审', role: 'EiC', icon: 'check', 
+      isOA: true, initiator: '管理编辑 (ME)', nextStep: '分配学术编辑并开始初审', passRole: '学术编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 ME / 作者' 
+    },
+    extent: 'parent',
+  },
+  {
+    id: 'node-4-update',
+    type: 'decision',
+    parentId: 'phase-4',
+    position: { x: 312, y: 80 },
+    data: { label: '系统归档更新' },
+    extent: 'parent',
+  },
+  {
+    id: 'node-outcome-published',
+    type: 'process',
+    parentId: 'phase-4',
+    position: { x: 500, y: 20 },
+    data: { label: '文章已发布', role: 'System', icon: 'check' },
+    extent: 'parent',
+  },
+  {
+    id: 'node-outcome-unpublished',
+    type: 'process',
+    parentId: 'phase-4',
+    position: { x: 500, y: 220 },
+    data: { label: '文章未发布', role: 'System', icon: 'x' },
     extent: 'parent',
   },
 ];
 
 const initialEdges: Edge[] = [
+  // 提交阶段到初审阶段
+  { id: 'e0-1-2', source: 'node-0-1', sourceHandle: 'bottom', target: 'node-1-2', targetHandle: 'top', type: 'smoothstep' },
+  
   // 初审流
-  { id: 'e1-1-2', source: 'node-1-1', sourceHandle: 'bottom', target: 'node-1-2', targetHandle: 'top', type: 'smoothstep' },
   { id: 'e1-2-3', source: 'node-1-2', sourceHandle: 'bottom', target: 'node-1-3', targetHandle: 'top', type: 'smoothstep' },
-  { id: 'e1-3-4', source: 'node-1-3', sourceHandle: 'bottom', target: 'node-1-4', targetHandle: 'top', type: 'smoothstep' },
+  { id: 'e1-3-1', source: 'node-1-3', sourceHandle: 'bottom', target: 'node-1-1', targetHandle: 'top', type: 'smoothstep' },
+  { id: 'e1-1-4', source: 'node-1-1', sourceHandle: 'bottom', target: 'node-1-4', targetHandle: 'top', type: 'smoothstep' },
   
   // Connect Phase 1 to Phase 2
   { 
     id: 'e1-p2', 
     source: 'node-1-2', 
     sourceHandle: 'right',
-    target: 'node-2-1', 
+    target: 'node-2-r', 
     targetHandle: 'left',
     type: 'smoothstep',
     animated: true,
-    style: { stroke: '#6366f1', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1' } 
+    style: { stroke: '#f16363ff', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#f16363ff' } 
   },
-
-  // ME审查直接到阶段三系统分发
   { 
-    id: 'e1-2-p3', 
+    id: 'e1-p2-2', 
     source: 'node-1-2', 
     sourceHandle: 'right',
-    target: 'node-3-decision', 
-    targetHandle: 'top',
+    target: 'node-2-5', 
+    targetHandle: 'left',
     type: 'smoothstep',
     animated: true,
-    style: { stroke: '#6366f1', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1' } 
+    style: { stroke: '#f16363ff', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#f16363ff' } 
   },
 
   // 同行评议流
-  { id: 'e2-1-r', source: 'node-2-1', sourceHandle: 'bottom', target: 'node-2-r', targetHandle: 'top', type: 'smoothstep' },
   { id: 'e2-r-3', source: 'node-2-r', sourceHandle: 'bottom', target: 'node-2-3', targetHandle: 'top', type: 'smoothstep' },
-  { id: 'e2-3-4', source: 'node-2-3', sourceHandle: 'bottom', target: 'node-2-4', targetHandle: 'top', type: 'smoothstep' },
+  { id: 'e2-3-6', source: 'node-2-3', sourceHandle: 'bottom', target: 'node-2-6', targetHandle: 'top', type: 'smoothstep' },
+  { id: 'e2-3-7', source: 'node-2-6', sourceHandle: 'bottom', target: 'node-2-4', targetHandle: 'top', type: 'smoothstep' },  
   { id: 'e2-4-5', source: 'node-2-4', sourceHandle: 'bottom', target: 'node-2-5', targetHandle: 'top', type: 'smoothstep' },
 
   // 连接同行评议到归档决策网关
@@ -239,18 +339,18 @@ const initialEdges: Edge[] = [
     source: 'node-2-5', 
     sourceHandle: 'right',
     target: 'node-3-decision', 
-    targetHandle: 'left',
+    targetHandle: 'top',
     type: 'smoothstep',
     animated: true,
-    style: { stroke: '#6366f1', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1' } 
+    style: { stroke: '#ff3838ff', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#ff3838ff' } 
   },
 
   // 决策分支
   { 
     id: 'e-dec-accept', 
     source: 'node-3-decision', 
-    sourceHandle: 'bottom-left', 
+    sourceHandle: 'bottom-center',  
     target: 'node-outcome-accept',
     targetHandle: 'top',
     type: 'smoothstep',
@@ -265,7 +365,7 @@ const initialEdges: Edge[] = [
   { 
     id: 'e-dec-reject', 
     source: 'node-3-decision', 
-    sourceHandle: 'bottom-right', 
+    sourceHandle: 'left', 
     target: 'node-outcome-reject',
     targetHandle: 'top',
     type: 'smoothstep',
@@ -280,7 +380,7 @@ const initialEdges: Edge[] = [
   { 
     id: 'e-dec-withdraw', 
     source: 'node-3-decision', 
-    sourceHandle: 'bottom-center', 
+    sourceHandle: 'right', 
     target: 'node-outcome-withdraw',
     targetHandle: 'top',
     type: 'smoothstep',
@@ -292,6 +392,54 @@ const initialEdges: Edge[] = [
     style: { stroke: '#64748b', strokeWidth: 2 },
     markerEnd: { type: MarkerType.ArrowClosed, color: '#64748b' }
   },
+  { id: 'e3-1-2', source: 'node-outcome-accept', sourceHandle: 'bottom', target: 'node-3-r', targetHandle: 'top', type: 'smoothstep' },
+
+  // Connect Phase 3 to Phase 4
+  { 
+    id: 'e3-p4', 
+    source: 'node-3-r', 
+    sourceHandle: 'bottom',
+    target: 'node-4-1', 
+    targetHandle: 'top',
+    type: 'smoothstep',
+    animated: true,
+    style: { stroke: '#f16363ff', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#f16363ff' } 
+  },
+
+  // 阶段4决策分支
+  { 
+    id: 'e4-update-published', 
+    source: 'node-4-update', 
+    sourceHandle: 'top', 
+    target: 'node-outcome-published',
+    targetHandle: 'left',
+    type: 'smoothstep',
+    label: '撤稿登记',
+    labelBgPadding: [8, 4],
+    labelBgBorderRadius: 4,
+    labelBgStyle: { fill: '#ecfdf5', stroke: '#10b981', strokeWidth: 1 },
+    labelStyle: { fill: '#10b981', fontWeight: 'bold', fontSize: 12 },
+    style: { stroke: '#10b981', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#10b981' }
+  },
+  { 
+    id: 'e4-update-unpublished', 
+    source: 'node-4-update', 
+    sourceHandle: 'bottom', 
+    target: 'node-outcome-unpublished',
+    targetHandle: 'left',
+    type: 'smoothstep',
+    label: '稿件拒录',
+    labelBgPadding: [8, 4],
+    labelBgBorderRadius: 4,
+    labelBgStyle: { fill: '#fff1f2', stroke: '#f43f5e', strokeWidth: 1 },
+    labelStyle: { fill: '#f43f5e', fontWeight: 'bold', fontSize: 12 },
+    style: { stroke: '#f43f5e', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' }
+  },
+  { id: 'e4-1-2', source: 'node-4-1', sourceHandle: 'bottom', target: 'node-4-2', targetHandle: 'top', type: 'smoothstep' },
+  { id: 'e4-2-3', source: 'node-4-1', sourceHandle: 'right', target: 'node-4-update', targetHandle: 'left', type: 'smoothstep' },
   
   // 修改循环 (From phase 2 pre-accept decision to phase 1)
   {

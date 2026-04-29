@@ -110,6 +110,42 @@ const defaultEdgeOptions = {
 };
 
 const pmConfig: Record<string, NodeConfig> = {
+  'node-0-1': {
+    role: '作者 (Author)',
+    workflow: '作者在系统内填写并核对所有必填元数据，上传稿件正文等必要附件。确认无误后点击提交，触发流转，稿件正式进入编辑部处理环节。(注：系统提交动作无需经ME确认入库)',
+    action: {
+      initiator: '作者',
+      executor: '投审稿系统',
+      material: '新稿件 / 返修稿',
+      decisions: [
+        { label: '提交成功 (待ME确认)', type: 'pass', nextStep: 'ME审批中', cc: '作者' }
+      ]
+    },
+    diagram: [
+      { label: '准备稿件' },
+      { label: '在线提交', isCurrent: true },
+      { label: 'ME初审' },
+    ],
+    states: [
+      { role: 'ME端', state: 'NA' },
+      { role: '主编端', state: 'NA' },
+      { role: '作者端', state: '提交新稿件 / 返修稿' },
+      { role: 'AE端', state: 'NA' },
+    ],
+    miniFlow: {
+      nodes: [
+        { id: 'n1', position: { x: 50, y: 100 }, type: 'miniNode', data: { actorLabel: '发起人', actor: '作者', actionLabel: '提交稿件', currentStatus: '[编辑部ME审核] 等待编辑部反馈', isCurrent: true } },
+        { id: 'n2', position: { x: 650, y: 100 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '编辑部ME审核结果', currentStatus: '[编辑部ME审核] 新稿件编辑部初审' } },
+        { id: 'n6', position: { x: -200, y: 132 }, type: 'miniNode', data: { actorLabel: '状态', actor: '提交稿件', actionLabel: '提交稿件', currentStatus: '', borderColor: 'white', showAction: false } },
+        { id: 'n4', position: { x: 400, y: 132 }, type: 'miniNode', data: { actorLabel: '状态', actor: 'ME审查', actionLabel: 'ME审查', currentStatus: '', borderColor: 'green', showAction: false } },
+      ],
+      edges: [
+        { id: 'e1', source: 'n1', target: 'n4', label: '提交成功发送ME' },
+        { id: 'e2', source: 'n6', target: 'n1' },
+        { id: 'e3', source: 'n4', target: 'n2' }
+      ]
+    }
+  },
   'node-1-1': {
     role: '作者 (Author)',
     workflow: '作者在系统内填写并核对所有必填元数据，上传稿件正文等必要附件。确认无误后点击提交，触发流转，稿件正式进入编辑部处理环节。(注：系统提交动作无需经ME确认入库)',
@@ -336,37 +372,6 @@ const pmConfig: Record<string, NodeConfig> = {
       ]
     }
   },
-  'node-2-1': {
-    role: '学术编辑 (AE)',
-    workflow: '进入同行评议阶段后，学术编辑 在专家库中挑选并定向发送邀请，配置审阅期限，以确保有数量达标的领域专家来评估本稿件。(注：系统正式向外发出邀请函之前必须由ME进行最终校验并在系统内授权执行)',
-    action: {
-      initiator: '送审系统/AE',
-      executor: '专家库匹配引擎',
-      material: '审稿专家邀请函',
-      decisions: [
-        { label: '发送邀请函 (待ME确认)', type: 'pass', nextStep: 'ME审批确认流转', cc: '受邀专家' }
-      ]
-    },
-    diagram: [
-      { label: '筛选专家' },
-      { label: '发送邀请', isCurrent: true },
-      { label: '等待专家响应' },
-    ],
-    states: [
-      { role: '学术编辑端', state: '待处理 - 待邀请审稿专家' },
-      { role: '审稿人端', state: '收到审阅邀请，待回复接受/拒绝' },
-      { role: '作者端', state: '外审中 (Under Peer Review)' },
-    ],
-    miniFlow: {
-      nodes: [
-        { id: 'n1', position: { x: 50, y: 100 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'AE', actionLabel: '挑选与发送邀请', currentStatus: '待邀请审稿专家', isCurrent: true } },
-        { id: 'n2', position: { x: 500, y: 100 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '审批确认流转', currentStatus: '待确认邀请函' } },
-      ],
-      edges: [
-        { id: 'e1', source: 'n1', target: 'n2', label: '发送邀请(待ME确认)' }
-      ]
-    }
-  },
   'node-2-3': {
     role: '学术编辑 (AE)',
     workflow: '在达到要求的最少审稿人数量并收齐他们返回的审稿意见后，学术编辑 负责提炼专家的核心反馈，并基于此形成最终的推荐结论，呈送给主编裁决。(注：学术编辑生成的结案推荐报告必须途经ME确认后方可送达主编)',
@@ -534,6 +539,153 @@ const pmConfig: Record<string, NodeConfig> = {
     states: [
       { role: '作者端', state: '状态完结 - 稿件已撤销 (Withdrawn)' },
     ]
+  },
+  'node-2-6': {
+    role: '管理编辑 (ME)',
+    workflow: 'ME 收到投稿后进行技术与格式初审。主要检查稿件格式、查重率、是否包含必填文件。审查通过则流转至主编评估；不通过拒稿通知主编进行初审决定；退修给作者反馈修稿要求补全信息。',
+    action: {
+      initiator: '作者',
+      executor: '管理编辑 (ME)',
+      material: '新稿件 / 返修稿',
+      decisions: [
+        { label: '通过ME初审', type: 'pass', nextStep: '分配EIC初审', cc: '主编, 作者' },
+        { label: '需初审返修', type: 'revise', nextStep: '退回作者', cc: '作者' },
+        { label: '初审拒稿', type: 'reject', nextStep: '初审决策 (主编)', cc: '主编' }
+      ]
+    },
+    diagram: [
+      { label: '收到新投稿' },
+      { label: '格式/技术审查', isCurrent: true },
+      { label: '分发决策', isDecision: true },
+    ],
+    states: [
+      { role: 'ME端', state: '编辑部ME审核结果 -> 分配EIC初审 / 需要初审返修 / 初审拒稿' },
+      { role: '主编端', state: 'NA' },
+      { role: '作者端', state: 'NA' },
+      { role: 'AE端', state: 'NA' },
+    ],
+    miniFlow: {
+      nodes: [
+        { id: 'n4', position: { x: -50, y: 172 }, type: 'miniNode', data: { actorLabel: '状态', actor: 'ME审查', actionLabel: 'ME审查', currentStatus: '', borderColor: 'green', showAction: false } },
+        { id: 'n1', position: { x: 200, y: 140 }, type: 'miniNode', data: { actorLabel: '发起人', actor: 'ME', actionLabel: '新稿件编辑部初审', currentStatus: '[编辑部ME审核] 新稿件编辑部初审', isCurrent: true } },
+        { id: 'n2', position: { x: 900, y: 60 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '主编 (EiC)', actionLabel: '初审决策', currentStatus: '[主编初审] 新稿件主编初审' } },
+        { id: 'n5', position: { x: 580, y: 92 }, type: 'miniNode', data: { actorLabel: '状态', actor: '主编初审', actionLabel: '主编初审', currentStatus: '', borderColor: 'orange', showAction: false } },
+        { id: 'n3', position: { x: 900, y: 220 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '作者', actionLabel: '初审返修', currentStatus: '[作者初审返修中] 初审返修中（ME）', showBottomHandle: true } },
+        { id: 'n6', position: { x: 580, y: 250 }, type: 'miniNode', data: { actorLabel: '状态', actor: '提交稿件', actionLabel: '提交稿件', currentStatus: '', borderColor: 'white', showBottomHandle: true, showAction: false } },
+      ],
+      edges: [
+        { id: 'e3', source: 'n4', target: 'n1'},
+        { id: 'e1', source: 'n1', target: 'n5', label: '初审拒稿 / 分配EIC初审' },
+        { id: 'e4', source: 'n5', target: 'n2'},
+        { id: 'e2', source: 'n1', target: 'n6', label: '需要初审返修' },
+        { id: 'e5', source: 'n6', target: 'n3', label: '完成返修' },
+        { id: 'e6', source: 'n3', target: 'n4', label: '重新提交', sourceHandle: 'bottom' }
+      ]
+    }
+  },
+  'node-4-1': {
+    role: '管理编辑 (ME)',
+    workflow: 'ME 收到投稿后进行技术与格式初审。主要检查稿件格式、查重率、是否包含必填文件。审查通过则流转至主编评估；不通过拒稿通知主编进行初审决定；退修给作者反馈修稿要求补全信息。',
+    action: {
+      initiator: '作者',
+      executor: '管理编辑 (ME)',
+      material: '新稿件 / 返修稿',
+      decisions: [
+        { label: '通过ME初审', type: 'pass', nextStep: '分配EIC初审', cc: '主编, 作者' },
+        { label: '需初审返修', type: 'revise', nextStep: '退回作者', cc: '作者' },
+        { label: '初审拒稿', type: 'reject', nextStep: '初审决策 (主编)', cc: '主编' }
+      ]
+    },
+    diagram: [
+      { label: '收到新投稿' },
+      { label: '格式/技术审查', isCurrent: true },
+      { label: '分发决策', isDecision: true },
+    ],
+    states: [
+      { role: 'ME端', state: '编辑部ME审核结果 -> 分配EIC初审 / 需要初审返修 / 初审拒稿' },
+      { role: '主编端', state: 'NA' },
+      { role: '作者端', state: 'NA' },
+      { role: 'AE端', state: 'NA' },
+    ],
+    miniFlow: {
+      nodes: [
+        { id: 'n4', position: { x: -50, y: 172 }, type: 'miniNode', data: { actorLabel: '状态', actor: 'ME审查', actionLabel: 'ME审查', currentStatus: '', borderColor: 'green', showAction: false } },
+        { id: 'n1', position: { x: 200, y: 140 }, type: 'miniNode', data: { actorLabel: '发起人', actor: 'ME', actionLabel: '新稿件编辑部初审', currentStatus: '[编辑部ME审核] 新稿件编辑部初审', isCurrent: true } },
+        { id: 'n2', position: { x: 900, y: 60 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '主编 (EiC)', actionLabel: '初审决策', currentStatus: '[主编初审] 新稿件主编初审' } },
+        { id: 'n5', position: { x: 580, y: 92 }, type: 'miniNode', data: { actorLabel: '状态', actor: '主编初审', actionLabel: '主编初审', currentStatus: '', borderColor: 'orange', showAction: false } },
+        { id: 'n3', position: { x: 900, y: 220 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '作者', actionLabel: '初审返修', currentStatus: '[作者初审返修中] 初审返修中（ME）', showBottomHandle: true } },
+        { id: 'n6', position: { x: 580, y: 250 }, type: 'miniNode', data: { actorLabel: '状态', actor: '提交稿件', actionLabel: '提交稿件', currentStatus: '', borderColor: 'white', showBottomHandle: true, showAction: false } },
+      ],
+      edges: [
+        { id: 'e3', source: 'n4', target: 'n1'},
+        { id: 'e1', source: 'n1', target: 'n5', label: '初审拒稿 / 分配EIC初审' },
+        { id: 'e4', source: 'n5', target: 'n2'},
+        { id: 'e2', source: 'n1', target: 'n6', label: '需要初审返修' },
+        { id: 'e5', source: 'n6', target: 'n3', label: '完成返修' },
+        { id: 'e6', source: 'n3', target: 'n4', label: '重新提交', sourceHandle: 'bottom' }
+      ]
+    }
+  },
+  'node-4-2': {
+    role: '主编 (EiC)',
+    workflow: '主编依据 ME 初审通过的稿件，从学术视角评估其是否符合期刊范畴。若符合，则为主编分配合适的学术编辑 (AE) 进入下一环节；若明显不符，执行直接拒稿 (Desk Reject)。(注：主编的任何阶段性决策与流转，均需经ME审批确认后方可真正执行)',
+    action: {
+      initiator: '管理编辑 (ME)',
+      executor: '主编 (EiC)',
+      material: 'ME格式初审合格的手稿',
+      decisions: [
+        { label: '分配学术编辑 (待ME确认)', type: 'pass', nextStep: 'ME审批确认流转', cc: '学术编辑 (AE)' },
+        { label: '直接拒稿 (Desk Reject) (待ME确认)', type: 'reject', nextStep: 'ME审批确认流转', cc: '管理编辑, 作者' }
+      ]
+    },
+    diagram: [
+      { label: 'ME 递交' },
+      { label: '学术价值评估', isCurrent: true },
+      { label: '分配学术编辑', isDecision: true },
+    ],
+    states: [
+      { role: 'ME端', state: '确认 / 退回主编重新做决定' },
+      { role: '主编端', state: '主编审核结果 -> 分配AE / 拒稿 / 接受 / 返修' },
+      { role: '作者端', state: '提交返修稿' },
+      { role: 'AE端', state: 'NA' },
+    ],
+    miniFlow: {
+      nodes: [
+        { id: 'n4', position: { x: -30, y: 172 }, type: 'miniNode', data: { actorLabel: '状态', actor: '主编审查', actionLabel: '主编初审', currentStatus: '', borderColor: 'orange', showAction: false } },
+        { id: 'n13', position: { x: 1150, y: 170 }, type: 'miniNode', data: { actorLabel: '状态', actor: '主编审查', actionLabel: '主编初审', currentStatus: '', borderColor: 'orange', showAction: false } },
+        { id: 'n1', position: { x: 230, y: 140 }, type: 'miniNode', data: { actorLabel: '发起人', actor: 'ME', actionLabel: '主编审核结果', currentStatus: '[主编初审] 新稿件主编初审', isCurrent: true } },
+        { id: 'n2', position: { x: 850, y: -50 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '确认 / 退回主编重新做决定', currentStatus: '[编辑部ME审核] 确认主编初审意见中' } },
+        { id: 'n7', position: { x: 850, y: 130 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '确认 / 退回主编重新做决定', currentStatus: '[编辑部ME审核] 确认主编初审意见中' } },
+        { id: 'n18', position: { x: 1950, y: 130 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '确认 / 退回主编重新做决定', currentStatus: '[编辑部ME审核] 确认 AE 中' } },
+        { id: 'n19', position: { x: 1680, y: 170 }, type: 'miniNode', data: { actorLabel: '状态', actor: 'ME 审查', actionLabel: 'ME 审查', currentStatus: '', borderColor: 'green', showAction: false } },
+        { id: 'n8', position: { x: 1400, y: 138 }, type: 'miniNode', data: { actorLabel: '发起人', actor: '主编', actionLabel: '分配 AE', currentStatus: '[主编初审] 等待分配 AE', isCurrent: true } },
+        { id: 'n5', position: { x: 1150, y: -10 }, type: 'miniNode', data: { actorLabel: '状态', actor: '系统归档', actionLabel: '系统归档', currentStatus: '', borderColor: 'red', showAction: false } },
+        { id: 'n100', position: { x: 850, y: 300 }, type: 'miniNode', data: { actorLabel: '执行人', actor: 'ME', actionLabel: '确认 / 退回主编重新做决定', currentStatus: '[编辑部ME审核] 确认主编初审意见中' } },
+        { id: 'n3', position: { x: 1500, y: 309 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '作者', actionLabel: '初审返修', currentStatus: '[作者初审返修中] 初审返修中（ME）', showBottomHandle: true } },
+        { id: 'n6', position: { x: 1150, y: 340 }, type: 'miniNode', data: { actorLabel: '状态', actor: '提交稿件', actionLabel: '提交稿件', currentStatus: '', borderColor: 'white', showBottomHandle: true, showAction: false } },
+        { id: 'n11', position: { x: 500, y: 172 }, type: 'miniNode', data: { actorLabel: '状态', actor: 'ME 审查', actionLabel: 'ME 查', currentStatus: '', borderColor: 'green', showAction: false } },
+        { id: 'n12', position: { x: -300, y: 172 }, type: 'miniNode', data: { actorLabel: '状态', actor: 'ME审查', actionLabel: 'ME审查', currentStatus: '', borderColor: 'green', showAction: false } },   
+        { id: 'n20', position: { x: 2200, y: 170 }, type: 'miniNode', data: { actorLabel: '状态', actor: '学术编辑初审', actionLabel: '学术编辑初审', currentStatus: '', borderColor: 'purple', showAction: false } }, 
+        { id: 'n21', position: { x: 2450, y: 130 }, type: 'miniNode', data: { actorLabel: '执行人', actor: '学术编辑', actionLabel: '确认 / 退回主编重新做决定', currentStatus: '[AE初审] AE 确认同意初审中' } },  
+      ],
+      edges: [
+        { id: 'e3', source: 'n4', target: 'n1'},
+        { id: 'e1', source: 'n11', target: 'n2', label: '初审拒稿' },
+        { id: 'e7', source: 'n11', target: 'n7', label: '分配 AE 初审' },
+        { id: 'e10', source: 'n7', target: 'n13'},
+        { id: 'e4', source: 'n1', target: 'n11'},
+        { id: 'e2', source: 'n11', target: 'n100', label: '需要初审返修' },
+        { id: 'e8', source: 'n2', target: 'n5', label: '确认' },
+        { id: 'e9', source: 'n12', target: 'n4'},
+        { id: 'e11', source: 'n13', target: 'n8'},
+        { id: 'e12', source: 'n8', target: 'n19'},
+        { id: 'e13', source: 'n19', target: 'n18'},
+        { id: 'e14', source: 'n18', target: 'n20'},
+        { id: 'e15', source: 'n20', target: 'n21'},
+        { id: 'e16', source: 'n100', target: 'n3'},
+        { id: 'e6', source: 'n3', target: 'n12', label: '重新提交', sourceHandle: 'bottom' }
+      ]
+    }
   }
 };
 

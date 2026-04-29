@@ -7,9 +7,13 @@ export function PhaseNode({ data, selected }: any) {
     "border-emerald-200 bg-emerald-50/20 text-emerald-600",
     "border-indigo-200 bg-indigo-50/20 text-indigo-600",
     "border-amber-200 bg-amber-50/10 text-amber-600",
+    "border-red-200 bg-red-50/20 text-red-600",
   ];
   
-  const colorClass = phaseColors[data.index] || phaseColors[0];
+  // 特殊处理phase-0（提交阶段）使用灰色
+  const colorClass = data.index === -1 
+    ? "border-slate-300 bg-slate-50/30 text-slate-600" 
+    : phaseColors[data.index] || phaseColors[0];
 
   return (
     <div 
