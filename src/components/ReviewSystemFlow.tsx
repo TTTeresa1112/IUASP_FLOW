@@ -22,6 +22,7 @@ import { DecisionNode } from './nodes/DecisionNode';
 import { ProcessNode } from './nodes/ProcessNode';
 import { PhaseNode } from './nodes/PhaseNode';
 import { ReviewerNode } from './nodes/ReviewerNode';
+import { OptionalGroupNode } from './nodes/OptionalGroupNode';
 import { ZoomIn, ZoomOut, Maximize, MousePointer2, BookOpen, Pointer, SquareDashed } from 'lucide-react';
 import { NodeDetails } from './NodeDetails';
 import { cn } from '../lib/utils';
@@ -31,6 +32,7 @@ const nodeTypes = {
   process: ProcessNode,
   phase: PhaseNode,
   reviewer: ReviewerNode,
+  optionalGroup: OptionalGroupNode,
 };
 
 const initialNodes: Node[] = [
@@ -78,9 +80,10 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-1',
     position: { x: 70, y: 440 },
-    data: { 
-      label: '学术编辑初审', role: 'AE', icon: 'search', 
-      isOA: true, initiator: '主编 (EiC)', nextStep: 'ME跨段审批', passRole: '管理编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 作者' 
+    data: {
+      label: '学术编辑初审', role: 'AE', icon: 'search',
+      isOA: true, initiator: '主编 (EiC)', nextStep: 'ME跨段审批', passRole: '管理编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 作者',
+      optional: true
     },
     extent: 'parent',
   },
@@ -104,6 +107,17 @@ const initialNodes: Node[] = [
     data: { label: '同行评议', index: 1, isExpanded: true },
     style: { width: 340, height: 750, zIndex: -1 },
     draggable: false,
+  },
+  {
+    id: 'node-2-optional',
+    type: 'optionalGroup',
+    parentId: 'phase-2',
+    position: { x: 50, y: 65 },
+    data: { label: '可跳过' },
+    style: { width: 240, height: 330, zIndex: -1 },
+    draggable: false,
+    selectable: false,
+    extent: 'parent',
   },
   {
     id: 'node-2-1',

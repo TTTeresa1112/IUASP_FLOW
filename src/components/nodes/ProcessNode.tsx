@@ -31,8 +31,8 @@ export function ProcessNode({ data, selected }: any) {
   const colorClass = roleColors[data.role as keyof typeof roleColors] || 'border-slate-300 bg-white';
   const displayName = roleNames[data.role as keyof typeof roleNames] || data.role;
 
-  return (
-    <div 
+  const nodeContent = (
+    <div
       className={cn(
         "w-[200px] px-4 py-3 rounded-lg border-2 shadow-sm transition-all",
         colorClass,
@@ -41,7 +41,7 @@ export function ProcessNode({ data, selected }: any) {
     >
       <Handle type="target" position={Position.Top} id="top" className="!w-2 !h-2 !bg-slate-400" />
       <Handle type="target" position={Position.Left} id="left" className="!opacity-0" />
-      
+
       <div className="flex items-center gap-2">
         <div className="p-1 rounded bg-white/50">
           <Icon size={14} />
@@ -58,6 +58,24 @@ export function ProcessNode({ data, selected }: any) {
 
       <Handle type="source" position={Position.Bottom} id="bottom" className="!w-2 !h-2 !bg-slate-400" />
       <Handle type="source" position={Position.Right} id="right" className="!opacity-0" />
+    </div>
+  );
+
+  if (!data.optional) {
+    return nodeContent;
+  }
+
+  return (
+    <div className="relative">
+      <span className="absolute -top-10 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap bg-slate-50 px-1 z-10">
+        可跳过
+      </span>
+      <div
+        className={cn(
+          "absolute -inset-5 rounded-xl border-2 border-dashed border-slate-400 bg-transparent"
+        )}
+      />
+      {nodeContent}
     </div>
   );
 }

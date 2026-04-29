@@ -10,7 +10,7 @@ export function ReviewerNode({ data, selected }: any) {
         selected ? "border-emerald-500 ring-2 ring-emerald-100" : "border-slate-200"
       )}
     >
-      <Handle type="target" position={Position.Top} className="!w-2 !h-2 !bg-slate-300" />
+      <Handle type="target" position={Position.Top} id="top" className="!w-2 !h-2 !bg-slate-300" />
       
       <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
         <UserCheck size={16} />
@@ -20,7 +20,7 @@ export function ReviewerNode({ data, selected }: any) {
         <p className="text-[11px] font-bold text-slate-700">{data.label || '提交审稿结论'}</p>
       </div>
 
-      <Handle type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-slate-300" />
+      <Handle type="source" position={Position.Bottom} id="bottom" className="!w-2 !h-2 !bg-slate-300" />
     </div>
   );
 }
