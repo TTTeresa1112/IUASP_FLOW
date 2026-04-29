@@ -555,7 +555,7 @@ export function NodeDetails({ node }: NodeDetailsProps) {
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold rounded-lg transition-colors cursor-pointer"
                 >
                   <Presentation size={16} />
-                  查看详细状态与流转图
+                  查看审批流程与流转图
                 </button>
               </div>
 
