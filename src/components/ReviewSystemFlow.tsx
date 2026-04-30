@@ -72,7 +72,7 @@ const initialNodes: Node[] = [
     parentId: 'phase-1',
     position: { x: 70, y: 80 },
     data: { 
-      label: 'ME审查', role: 'ME', icon: 'search', 
+      label: 'ME 初审', role: 'ME', icon: 'search', 
       isOA: true, initiator: '作者', nextStep: '分配主编并进入EIC初审', passRole: '主编, 作者', rejectStep: '终审决策 (主编)', reviseStep: '退回给作者' 
     },
     extent: 'parent',
@@ -83,7 +83,7 @@ const initialNodes: Node[] = [
     parentId: 'phase-1',
     position: { x: 70, y: 200 },
     data: { 
-      label: 'EIC初审', role: 'EiC', icon: 'check', 
+      label: 'EIC 初审', role: 'EiC', icon: 'check', 
       isOA: true, initiator: '管理编辑 (ME)', nextStep: '分配学术编辑并开始初审', passRole: '学术编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 ME / 作者' 
     },
     extent: 'parent',
@@ -104,7 +104,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-1',
     position: { x: 70, y: 320 },
-    data: { label: '提交返修稿件', role: '作者', icon: 'user' },
+    data: { label: 'AU 提交返修稿件', role: '作者', icon: 'user' },
     extent: 'parent',
   },
   {
@@ -113,7 +113,7 @@ const initialNodes: Node[] = [
     parentId: 'phase-1',
     position: { x: 70, y: 440 },
     data: {
-      label: '学术编辑初审', role: 'AE', icon: 'search',
+      label: 'AE 初审', role: 'AE', icon: 'search',
       isOA: true, initiator: '主编 (EiC)', nextStep: 'ME跨段审批', passRole: '管理编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 作者'
     },
     extent: 'parent',
@@ -145,7 +145,7 @@ const initialNodes: Node[] = [
     type: 'reviewer',
     parentId: 'phase-2',
     position: { x: 70, y: 83 },
-    data: { label: '收集审稿意见' },
+    data: { label: 'RE 提交同行评议意见' },
     extent: 'parent',
   },
   {
@@ -153,7 +153,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-2',
     position: { x: 70, y: 190 },
-    data: { label: '汇总审稿意见', role: 'AE', icon: 'book' },
+    data: { label: 'AE 同行评议意见', role: 'AE', icon: 'book' },
     extent: 'parent',
   },
   {
@@ -162,7 +162,7 @@ const initialNodes: Node[] = [
     parentId: 'phase-2',
     position: { x: 70, y: 310 },
     data: { 
-      label: 'ME审查', role: 'ME', icon: 'search', 
+      label: 'ME 同行评议意见', role: 'ME', icon: 'search', 
       isOA: true, initiator: '作者', nextStep: '分配主编并进入EIC初审', passRole: '主编, 作者', rejectStep: '终审决策 (主编)', reviseStep: '退回给作者' 
     },
     extent: 'parent',
@@ -172,7 +172,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-2',
     position: { x: 70, y: 440 },
-    data: { label: '主编终审评估', role: 'EiC', icon: 'check' },
+    data: { label: 'EIC 同行评议意见', role: 'EiC', icon: 'check' },
     extent: 'parent',
   },
   {
@@ -180,7 +180,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-2',
     position: { x: 70, y: 560 },
-    data: { label: '预接受确认', role: 'ME', icon: 'check' },
+    data: { label: 'ME 预接受', role: 'ME', icon: 'check' },
     extent: 'parent',
   },
 
@@ -198,7 +198,7 @@ const initialNodes: Node[] = [
     type: 'decision',
     parentId: 'phase-3',
     position: { x: 312, y: 50 },
-    data: { label: '系统归档分发' },
+    data: { label: '归档决策' },
     extent: 'parent',
   },
 
@@ -208,7 +208,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-3',
     position: { x: 50, y: 260 },
-    data: { label: '稿件拒录', role: 'System', icon: 'clock' },
+    data: { label: '拒稿', role: 'System', icon: 'clock' },
     extent: 'parent',
   },
   {
@@ -216,7 +216,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-3',
     position: { x: 510, y: 260 },
-    data: { label: '稿件撤销', role: 'System', icon: 'check' },
+    data: { label: '撤稿', role: 'System', icon: 'check' },
     extent: 'parent',
   },
   {
@@ -224,7 +224,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-3',
     position: { x: 280, y: 260 },
-    data: { label: '稿件录用', role: 'System', icon: 'clock' },
+    data: { label: '接受', role: 'System', icon: 'clock' },
     extent: 'parent',
   },
   {
@@ -232,7 +232,7 @@ const initialNodes: Node[] = [
     type: 'reviewer',
     parentId: 'phase-3',
     position: { x: 280, y: 360 },
-    data: { label: '获得售后意见' },
+    data: { label: 'RE 提交归档更新意见' },
     extent: 'parent',
   },
   
@@ -242,7 +242,7 @@ const initialNodes: Node[] = [
     id: 'phase-4',
     type: 'phase',
     position: { x: 830, y: 500 },
-    data: { label: '售后阶段', index: 3, isExpanded: true },
+    data: { label: '归档更新阶段', index: 3, isExpanded: true },
     style: { width: 760, height: 300, zIndex: -1 },
     draggable: false,
   },
@@ -252,7 +252,7 @@ const initialNodes: Node[] = [
     parentId: 'phase-4',
     position: { x: 50, y: 115 },
     data: { 
-      label: 'ME审查', role: 'ME', icon: 'search', 
+      label: 'ME 审查', role: 'ME', icon: 'search', 
       isOA: true, initiator: '作者', nextStep: '分配主编并进入EIC初审', passRole: '主编, 作者', rejectStep: '终审决策 (主编)', reviseStep: '退回给作者' 
     },
     extent: 'parent',
@@ -263,7 +263,7 @@ const initialNodes: Node[] = [
     parentId: 'phase-4',
     position: { x: 50, y: 220 },
     data: { 
-      label: 'EIC初审', role: 'EiC', icon: 'check', 
+      label: 'EIC 初审', role: 'EiC', icon: 'check', 
       isOA: true, initiator: '管理编辑 (ME)', nextStep: '分配学术编辑并开始初审', passRole: '学术编辑', rejectStep: '终审决策 (主编)', reviseStep: '退回至 ME / 作者' 
     },
     extent: 'parent',
@@ -273,7 +273,7 @@ const initialNodes: Node[] = [
     type: 'decision',
     parentId: 'phase-4',
     position: { x: 312, y: 80 },
-    data: { label: '系统归档更新' },
+    data: { label: '归档更新' },
     extent: 'parent',
   },
   {
@@ -281,7 +281,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-4',
     position: { x: 500, y: 20 },
-    data: { label: '文章已发布', role: 'System', icon: 'check' },
+    data: { label: '撤稿', role: 'System', icon: 'check' },
     extent: 'parent',
   },
   {
@@ -289,7 +289,7 @@ const initialNodes: Node[] = [
     type: 'process',
     parentId: 'phase-4',
     position: { x: 500, y: 220 },
-    data: { label: '文章未发布', role: 'System', icon: 'x' },
+    data: { label: '拒稿', role: 'System', icon: 'x' },
     extent: 'parent',
   },
 ];
@@ -430,7 +430,7 @@ const initialEdges: Edge[] = [
     target: 'node-outcome-unpublished',
     targetHandle: 'left',
     type: 'smoothstep',
-    label: '稿件拒录',
+    label: '拒稿结案',
     labelBgPadding: [8, 4],
     labelBgBorderRadius: 4,
     labelBgStyle: { fill: '#fff1f2', stroke: '#f43f5e', strokeWidth: 1 },

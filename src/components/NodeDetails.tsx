@@ -116,9 +116,9 @@ const pmConfig: Record<string, NodeConfig> = {
     action: {
       initiator: '作者',
       executor: '投审稿系统',
-      material: '新稿件 / 返修稿',
+      material: '新稿件',
       decisions: [
-        { label: '提交成功 (待ME确认)', type: 'pass', nextStep: 'ME审批中', cc: '作者' }
+        { label: '填写数据', type: 'pass', nextStep: '点击提交', cc: 'ME' }
       ]
     },
     diagram: [
@@ -129,7 +129,7 @@ const pmConfig: Record<string, NodeConfig> = {
     states: [
       { role: 'ME端', state: 'NA' },
       { role: '主编端', state: 'NA' },
-      { role: '作者端', state: '提交新稿件 / 返修稿' },
+      { role: '作者端', state: '提交新稿件' },
       { role: 'AE端', state: 'NA' },
     ],
     miniFlow: {
