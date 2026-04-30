@@ -236,8 +236,8 @@ const initialNodes: Node[] = [
     extent: 'parent',
   },
   {
-    id: 'node-3-r',
-    type: 'reviewer',
+    id: 'node-3-4',
+    type: 'process',
     parentId: 'phase-3',
     position: { x: 280, y: 360 },
     data: { label: '提交归档更新意见 RE' },
@@ -250,7 +250,7 @@ const initialNodes: Node[] = [
     id: 'phase-4',
     type: 'phase',
     position: { x: 830, y: 500 },
-    data: { label: '归档更新阶段', index: 3, isExpanded: true },
+    data: { label: '归档更新阶段（售后）', index: 3, isExpanded: true },
     style: { width: 760, height: 300, zIndex: -1 },
     draggable: false,
   },
@@ -298,6 +298,14 @@ const initialNodes: Node[] = [
     parentId: 'phase-4',
     position: { x: 500, y: 220 },
     data: { label: '拒稿', role: 'System', icon: 'x' },
+    extent: 'parent',
+  },
+  {
+    id: 'node-outcome-correction',
+    type: 'process',
+    parentId: 'phase-4',
+    position: { x: 550, y: 120 },
+    data: { label: '更正', role: 'System', icon: 'edit' },
     extent: 'parent',
   },
 ];
@@ -411,12 +419,12 @@ const initialEdges: Edge[] = [
     style: { stroke: '#64748b', strokeWidth: 2 },
     markerEnd: { type: MarkerType.ArrowClosed, color: '#64748b' }
   },
-  { id: 'e3-1-2', source: 'node-outcome-accept', sourceHandle: 'bottom', target: 'node-3-r', targetHandle: 'top', type: 'smoothstep' },
+  { id: 'e3-1-2', source: 'node-outcome-accept', sourceHandle: 'bottom', target: 'node-3-4', targetHandle: 'top', type: 'smoothstep' },
 
   // Connect Phase 3 to Phase 4
   { 
     id: 'e3-p4', 
-    source: 'node-3-r', 
+    source: 'node-3-4', 
     sourceHandle: 'bottom',
     target: 'node-4-1', 
     targetHandle: 'top',
@@ -437,10 +445,25 @@ const initialEdges: Edge[] = [
     label: '撤稿登记',
     labelBgPadding: [8, 4],
     labelBgBorderRadius: 4,
-    labelBgStyle: { fill: '#ecfdf5', stroke: '#10b981', strokeWidth: 1 },
-    labelStyle: { fill: '#10b981', fontWeight: 'bold', fontSize: 12 },
-    style: { stroke: '#10b981', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#10b981' }
+    labelBgStyle: { fill: '#fff1f2', stroke: '#f43f5e', strokeWidth: 1 },
+    labelStyle: { fill: '#f43f5e', fontWeight: 'bold', fontSize: 12 },
+    style: { stroke: '#f43f5e', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' }
+  },
+  { 
+    id: 'e4-update-correction', 
+    source: 'node-4-update', 
+    sourceHandle: 'right', 
+    target: 'node-outcome-correction',
+    targetHandle: 'left',
+    type: 'smoothstep',
+    label: '更正登记',
+    labelBgPadding: [8, 4],
+    labelBgBorderRadius: 4,
+    labelBgStyle: { fill: '#dbeafe', stroke: '#3b82f6', strokeWidth: 1 },
+    labelStyle: { fill: '#1d4ed8', fontWeight: 'bold', fontSize: 12 },
+    style: { stroke: '#3b82f6', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#3b82f6' }
   },
   { 
     id: 'e4-update-unpublished', 
