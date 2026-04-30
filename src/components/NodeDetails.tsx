@@ -269,13 +269,13 @@ const pmConfig: Record<string, NodeConfig> = {
         { id: 'e2-3', source: 'n2', target: 'n3-3', label: '初审 AE' },
         { id: 'e2-4', source: 'n2', target: 'n3-4', label: '初审 返修' },
         { id: 'e2-1-1', source: 'n3-1', target: 'n4', label: '确认', sourceHandle: 'right' },
-        { id: 'e2-1-2', source: 'n3-1', target: 'n1', label: '驳回 重提', sourceHandle: 'top' },
+        { id: 'e2-1-2', source: 'n3-1', target: 'n1', label: '驳回 重提', sourceHandle: 'top', style: { stroke: '#f43f5e', strokeWidth: 2 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' } },
         { id: 'e2-2-1', source: 'n3-2', target: 'n5', label: '确认', sourceHandle: 'right' },
-        { id: 'e2-2-2', source: 'n3-2', target: 'n1', label: '驳回 重提', sourceHandle: 'top' },
+        { id: 'e2-2-2', source: 'n3-2', target: 'n1', label: '驳回 重提', sourceHandle: 'top', style: { stroke: '#f43f5e', strokeWidth: 2 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' } },
         { id: 'e2-3-1', source: 'n3-3', target: 'n6', label: '确认', sourceHandle: 'right' },
-        { id: 'e2-3-2', source: 'n3-3', target: 'n1', label: '驳回 重提', sourceHandle: 'bottom' },
+        { id: 'e2-3-2', source: 'n3-3', target: 'n1', label: '驳回 重提', sourceHandle: 'bottom', style: { stroke: '#f43f5e', strokeWidth: 2 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' } },
         { id: 'e2-4-1', source: 'n3-4', target: 'n7', label: '确认', sourceHandle: 'right' },
-        { id: 'e2-4-2', source: 'n3-4', target: 'n1', label: '驳回 重提', sourceHandle: 'bottom' },         
+        { id: 'e2-4-2', source: 'n3-4', target: 'n1', label: '驳回 重提', sourceHandle: 'bottom', style: { stroke: '#f43f5e', strokeWidth: 2 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' } },         
         { id: 'e3', source: 'n6', target: 'n8', sourceHandle: 'right' },
         { id: 'e4', source: 'n7', target: 'n9', sourceHandle: 'right' },
         { id: 'e5', source: 'n8', target: 'n11', sourceHandle: 'right' },
@@ -874,7 +874,7 @@ export function NodeDetails({ node }: NodeDetailsProps) {
                 <div className="flex-1 w-full bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm relative">
                   <ReactFlow
                     nodes={config.miniFlow.nodes}
-                    edges={config.miniFlow.edges.map((e: Edge) => ({ ...e, ...defaultEdgeOptions }))}
+                    edges={config.miniFlow.edges.map((e: Edge) => ({ ...defaultEdgeOptions, ...e }))}
                     nodeTypes={miniNodeTypes}
                     fitView
                     proOptions={{ hideAttribution: true }}

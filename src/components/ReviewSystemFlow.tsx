@@ -306,25 +306,36 @@ const initialEdges: Edge[] = [
   // Connect Phase 1 to Phase 2
   { 
     id: 'e1-p2', 
-    source: 'node-1-2', 
+    source: 'node-1-4', 
     sourceHandle: 'right',
     target: 'node-2-r', 
     targetHandle: 'left',
     type: 'smoothstep',
     animated: true,
-    style: { stroke: '#f16363ff', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#f16363ff' } 
+    style: { stroke: '#76f163ff', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#76f163ff' } 
   },
   { 
     id: 'e1-p2-2', 
-    source: 'node-1-2', 
-    sourceHandle: 'right',
+    source: 'node-1-3', 
+    sourceHandle: 'bottom',
     target: 'node-2-5', 
     targetHandle: 'left',
     type: 'smoothstep',
     animated: true,
-    style: { stroke: '#f16363ff', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#f16363ff' } 
+    style: { stroke: '#76f163ff', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#76f163ff' } 
+  },
+  { 
+    id: 'e1-p3', 
+    source: 'node-1-3', 
+    sourceHandle: 'right',
+    target: 'node-3-decision', 
+    targetHandle: 'top',
+    type: 'smoothstep',
+    animated: true,
+    style: { stroke: '#ff3838ff', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#ff3838ff' } 
   },
 
   // 同行评议流
@@ -342,8 +353,8 @@ const initialEdges: Edge[] = [
     targetHandle: 'top',
     type: 'smoothstep',
     animated: true,
-    style: { stroke: '#ff3838ff', strokeWidth: 2 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#ff3838ff' } 
+    style: { stroke: '#ffc629ff', strokeWidth: 2 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#ffc629ff' } 
   },
 
   // 决策分支
