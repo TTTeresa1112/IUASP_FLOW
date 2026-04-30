@@ -280,7 +280,7 @@ const pmConfig: Record<string, NodeConfig> = {
         { id: 'e4', source: 'n7', target: 'n9', sourceHandle: 'right' },
         { id: 'e5', source: 'n8', target: 'n11', sourceHandle: 'right' },
         { id: 'e6', source: 'n9', target: 'n12', sourceHandle: 'right' },
-        { id: 'e7-1', source: 'n11', target: 'n6', sourceHandle: 'top', label: '驳回 重提' },
+        { id: 'e7-1', source: 'n11', target: 'n6', sourceHandle: 'top', label: '驳回 重提', style: { stroke: '#f43f5e', strokeWidth: 2 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' } },
         { id: 'e7-2', source: 'n11', target: 'n13', sourceHandle: 'right', label: '通过' },
         { id: 'e8', source: 'n12', target: 'n14', sourceHandle: 'right', label: '提交返修稿' },
       ]

@@ -23,7 +23,7 @@ import { ProcessNode } from './nodes/ProcessNode';
 import { PhaseNode } from './nodes/PhaseNode';
 import { ReviewerNode } from './nodes/ReviewerNode';
 import { OptionalGroupNode } from './nodes/OptionalGroupNode';
-import { ZoomIn, ZoomOut, Maximize, MousePointer2, BookOpen, Pointer, SquareDashed, PanelLeft, PanelLeftClose } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, MousePointer2, BookOpen, Pointer, SquareDashed, PanelLeft, PanelLeftClose, PanelRight, PanelRightClose } from 'lucide-react';
 import { NodeDetails } from './NodeDetails';
 import { cn } from '../lib/utils';
 
@@ -477,6 +477,7 @@ export default function ReviewSystemFlow() {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [isLeftPanelVisible, setIsLeftPanelVisible] = useState(true);
+  const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
 
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -569,6 +570,16 @@ export default function ReviewSystemFlow() {
             {isLeftPanelVisible ? <PanelLeftClose size={16} className="text-slate-600" /> : <PanelLeft size={16} className="text-slate-600" />}
             <span className="text-xs font-medium text-slate-600">{isLeftPanelVisible ? '隐藏' : '显示'}</span>
           </button>
+
+          {/* 右侧面板切换按钮 */}
+          <button
+            onClick={() => setIsRightPanelVisible(!isRightPanelVisible)}
+            className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer"
+            title={isRightPanelVisible ? '隐藏右侧面板' : '显示右侧面板'}
+          >
+            {isRightPanelVisible ? <PanelRightClose size={16} className="text-slate-600" /> : <PanelRight size={16} className="text-slate-600" />}
+            <span className="text-xs font-medium text-slate-600">{isRightPanelVisible ? '隐藏' : '显示'}</span>
+          </button>
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -590,7 +601,7 @@ export default function ReviewSystemFlow() {
         </main>
 
         {/* 右侧属性面板 */}
-        <aside className="w-[520px] bg-white border-l border-slate-200 flex flex-col shrink-0 shadow-lg z-20">
+        <aside className={`bg-white border-l border-slate-200 flex flex-col shrink-0 shadow-lg z-20 transition-all duration-300 ${isRightPanelVisible ? 'w-[520px]' : 'w-0 overflow-hidden'}`}>
           <div className="flex-1 overflow-y-auto p-8">
             {selectedNode ? (
               <NodeDetails node={selectedNode} />
