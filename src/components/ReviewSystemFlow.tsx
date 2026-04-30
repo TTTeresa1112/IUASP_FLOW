@@ -23,7 +23,7 @@ import { ProcessNode } from './nodes/ProcessNode';
 import { PhaseNode } from './nodes/PhaseNode';
 import { ReviewerNode } from './nodes/ReviewerNode';
 import { OptionalGroupNode } from './nodes/OptionalGroupNode';
-import { ZoomIn, ZoomOut, Maximize, MousePointer2, BookOpen, Pointer, SquareDashed } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, MousePointer2, BookOpen, Pointer, SquareDashed, PanelLeft, PanelLeftClose } from 'lucide-react';
 import { NodeDetails } from './NodeDetails';
 import { cn } from '../lib/utils';
 
@@ -476,6 +476,7 @@ export default function ReviewSystemFlow() {
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [isLeftPanelVisible, setIsLeftPanelVisible] = useState(true);
 
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -498,7 +499,7 @@ export default function ReviewSystemFlow() {
     <div className="w-full h-full flex bg-slate-50 overflow-hidden font-sans text-slate-800">
       <div className="flex flex-1 overflow-hidden">
         {/* 左侧工具栏 / 图例 */}
-        <aside className="w-[180px] bg-white border-r border-slate-200 p-4 flex flex-col gap-6 shrink-0 shadow-sm z-10 overflow-y-auto">
+        <aside className={`bg-white border-r border-slate-200 flex flex-col gap-6 shrink-0 shadow-sm z-10 overflow-y-auto transition-all duration-300 ${isLeftPanelVisible ? 'w-[180px] p-4' : 'w-0 p-0 overflow-hidden'}`}>
           <div className="transform origin-top-left scale-[0.85] w-[117%]">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">角色图例</h3>
             <div className="space-y-1">
@@ -559,6 +560,15 @@ export default function ReviewSystemFlow() {
 
         {/* 画板区域 */}
         <main className="flex-1 relative bg-slate-50 overflow-hidden">
+          {/* 左侧面板切换按钮 */}
+          <button
+            onClick={() => setIsLeftPanelVisible(!isLeftPanelVisible)}
+            className="absolute top-4 left-4 z-10 flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer"
+            title={isLeftPanelVisible ? '隐藏左侧面板' : '显示左侧面板'}
+          >
+            {isLeftPanelVisible ? <PanelLeftClose size={16} className="text-slate-600" /> : <PanelLeft size={16} className="text-slate-600" />}
+            <span className="text-xs font-medium text-slate-600">{isLeftPanelVisible ? '隐藏' : '显示'}</span>
+          </button>
           <ReactFlow
             nodes={nodes}
             edges={edges}
