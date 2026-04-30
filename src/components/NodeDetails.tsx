@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Node, ReactFlow, Background, MarkerType, Handle, Position, Edge, SelectionMode } from '@xyflow/react';
+import { Node, ReactFlow, Background, Controls, MarkerType, Handle, Position, Edge, SelectionMode } from '@xyflow/react';
 import { FileSignature, Send, Presentation, X, ArrowRight, ArrowDown, User, Activity, AlertCircle, Pointer, SquareDashed, Maximize2, Minimize2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -825,85 +825,74 @@ export function NodeDetails({ node }: NodeDetailsProps) {
 
       {/* Modal / Dialog for Detailed Diagram */}
       {isDiagramModalOpen && config && (
-        <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm shadow-2xl ${isFullscreen ? 'p-0' : 'p-4'}`}>
-          <div className={`bg-slate-50 rounded-2xl shadow-xl w-full flex flex-col overflow-hidden border border-slate-200/50 ${isFullscreen ? 'max-w-none h-screen rounded-none' : 'max-w-5xl h-[85vh]'}`}>
-            {/* Header */}
-            <div className="flex justify-between items-center px-6 py-4 bg-white border-b border-slate-200 shrink-0">
-              <div>
-                <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-                  <Activity className="text-indigo-600" />
-                  状态涉及审批环节流程图：{String(node.data.label || node.type)}
-                </h3>
-                <p className="text-xs text-slate-500 mt-1">此视图展示当前节点触发的详细执行、决策选项和端侧状态数据同步及变更关系</p>
+        <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm ${isFullscreen ? 'p-0' : 'p-4'}`}>
+          <div className={`bg-white w-full flex flex-col overflow-hidden ${isFullscreen ? 'h-screen' : 'h-[85vh] max-w-5xl rounded-xl'}`}>
+            {/* 操作工具栏 */}
+            <div className="flex items-center justify-between px-4 py-2 bg-slate-50 border-b border-slate-200 shrink-0">
+              <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-sm">
+                <button
+                  onClick={() => setIsMiniSelectionMode(false)}
+                  className={cn(
+                    "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer",
+                    !isMiniSelectionMode ? "bg-indigo-100 text-indigo-700" : "text-slate-500 hover:text-slate-700"
+                  )}
+                >
+                  <Pointer size={12} />
+                  平移
+                </button>
+                <button
+                  onClick={() => setIsMiniSelectionMode(true)}
+                  className={cn(
+                    "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer",
+                    isMiniSelectionMode ? "bg-indigo-100 text-indigo-700" : "text-slate-500 hover:text-slate-700"
+                  )}
+                >
+                  <SquareDashed size={12} />
+                  框选
+                </button>
               </div>
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => setIsFullscreen(!isFullscreen)} 
-                  className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer"
                   title={isFullscreen ? '退出全屏' : '全屏'}
                 >
-                  {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                  {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
                 </button>
                 <button 
                   onClick={() => setIsDiagramModalOpen(false)} 
-                  className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer"
                 >
-                  <X size={20} />
+                  <X size={18} />
                 </button>
               </div>
             </div>
 
-            {/* Swimlane Detailed Diagram Content -> Now React Flow Map */}
-            <div className="p-8 flex-1 font-sans flex flex-col h-full bg-slate-100/50">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-sm font-bold text-slate-400 uppercase tracking-wide">执行流状态树</h4>
-                <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-sm">
-                  <button
-                    onClick={() => setIsMiniSelectionMode(false)}
-                    className={cn(
-                      "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer",
-                      !isMiniSelectionMode ? "bg-indigo-100 text-indigo-700" : "text-slate-500 hover:text-slate-700"
-                    )}
-                  >
-                    <Pointer size={12} />
-                    平移
-                  </button>
-                  <button
-                    onClick={() => setIsMiniSelectionMode(true)}
-                    className={cn(
-                      "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer",
-                      isMiniSelectionMode ? "bg-indigo-100 text-indigo-700" : "text-slate-500 hover:text-slate-700"
-                    )}
-                  >
-                    <SquareDashed size={12} />
-                    框选
-                  </button>
-                </div>
-              </div>
+            {/* 流程图画布 */}
+            <div className="flex-1 relative">
               {config.miniFlow ? (
-                <div className="flex-1 w-full bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm relative">
-                  <ReactFlow
-                    nodes={config.miniFlow.nodes}
-                    edges={config.miniFlow.edges.map((e: Edge) => ({ ...defaultEdgeOptions, ...e }))}
-                    nodeTypes={miniNodeTypes}
-                    fitView
-                    proOptions={{ hideAttribution: true }}
-                    nodesDraggable={false}
-                    panOnDrag={!isMiniSelectionMode}
-                    selectionOnDrag={isMiniSelectionMode}
-                    selectionMode={SelectionMode.Partial}
-                    zoomOnScroll={true}
-                    minZoom={0.5}
-                    maxZoom={1.5}
-                  >
-                    <Background color="#cbd5e1" gap={16} />
-                  </ReactFlow>
-                </div>
+                <ReactFlow
+                  nodes={config.miniFlow.nodes}
+                  edges={config.miniFlow.edges.map((e: Edge) => ({ ...defaultEdgeOptions, ...e }))}
+                  nodeTypes={miniNodeTypes}
+                  fitView
+                  proOptions={{ hideAttribution: true }}
+                  nodesDraggable={false}
+                  panOnDrag={!isMiniSelectionMode}
+                  selectionOnDrag={isMiniSelectionMode}
+                  selectionMode={SelectionMode.Partial}
+                  zoomOnScroll={true}
+                  minZoom={0.3}
+                  maxZoom={2}
+                >
+                  <Background color="#cbd5e1" gap={16} />
+                  <Controls className="!bg-white !border-slate-200 !shadow-md" showInteractive={false} />
+                </ReactFlow>
               ) : (
-                 <div className="flex-1 w-full flex items-center justify-center bg-slate-50 border border-slate-200 rounded-xl text-slate-400">
-                    <AlertCircle className="mr-2" />
-                    暂无流程状态图配置
-                 </div>
+                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                  <AlertCircle className="mr-2" />
+                  暂无流程状态图配置
+                </div>
               )}
             </div>
           </div>
