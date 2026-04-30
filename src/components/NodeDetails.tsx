@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Node, ReactFlow, Background, MarkerType, Handle, Position, Edge, SelectionMode } from '@xyflow/react';
-import { FileSignature, Send, Presentation, X, ArrowRight, ArrowDown, User, Activity, AlertCircle, Pointer, SquareDashed } from 'lucide-react';
+import { FileSignature, Send, Presentation, X, ArrowRight, ArrowDown, User, Activity, AlertCircle, Pointer, SquareDashed, Maximize2, Minimize2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 interface NodeDetailsProps {
@@ -724,6 +724,7 @@ const getReviewerConfig = (): NodeConfig => ({
 export function NodeDetails({ node }: NodeDetailsProps) {
   const [isDiagramModalOpen, setIsDiagramModalOpen] = useState(false);
   const [isMiniSelectionMode, setIsMiniSelectionMode] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // If no internal config found, fallback to generic
   const isReviewerNode = node.type === 'reviewer';
@@ -824,8 +825,8 @@ export function NodeDetails({ node }: NodeDetailsProps) {
 
       {/* Modal / Dialog for Detailed Diagram */}
       {isDiagramModalOpen && config && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm shadow-2xl">
-          <div className="bg-slate-50 rounded-2xl shadow-xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden border border-slate-200/50">
+        <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm shadow-2xl ${isFullscreen ? 'p-0' : 'p-4'}`}>
+          <div className={`bg-slate-50 rounded-2xl shadow-xl w-full flex flex-col overflow-hidden border border-slate-200/50 ${isFullscreen ? 'max-w-none h-screen rounded-none' : 'max-w-5xl h-[85vh]'}`}>
             {/* Header */}
             <div className="flex justify-between items-center px-6 py-4 bg-white border-b border-slate-200 shrink-0">
               <div>
@@ -835,12 +836,21 @@ export function NodeDetails({ node }: NodeDetailsProps) {
                 </h3>
                 <p className="text-xs text-slate-500 mt-1">此视图展示当前节点触发的详细执行、决策选项和端侧状态数据同步及变更关系</p>
               </div>
-              <button 
-                onClick={() => setIsDiagramModalOpen(false)} 
-                className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
-              >
-                <X size={20} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setIsFullscreen(!isFullscreen)} 
+                  className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                  title={isFullscreen ? '退出全屏' : '全屏'}
+                >
+                  {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                </button>
+                <button 
+                  onClick={() => setIsDiagramModalOpen(false)} 
+                  className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
 
             {/* Swimlane Detailed Diagram Content -> Now React Flow Map */}
