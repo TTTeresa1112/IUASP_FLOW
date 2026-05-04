@@ -348,7 +348,7 @@ const pmConfig: Record<string, NodeConfig> = {
         { id: 'e1', source: 'n1', target: 'n2', sourceHandle: 'right' },
         { id: 'e2-1', source: 'n2', target: 'n3-1', label: '初审 拒稿' },
         { id: 'e2-2', source: 'n2', target: 'n3-2', label: '初审 接受' },
-        { id: 'e2-3', source: 'n2', target: 'n3-3', label: '初审 AE' },
+        { id: 'e2-3', source: 'n2', target: 'n3-3', label: '同行评议' },
         { id: 'e2-4', source: 'n2', target: 'n3-4', label: '初审 返修' },
         { id: 'e2-1-1', source: 'n3-1', target: 'n4', label: '确认', sourceHandle: 'right' },
         { id: 'e2-1-2', source: 'n3-1', target: 'n1', label: '驳回 重提', sourceHandle: 'top', style: { stroke: '#f43f5e', strokeWidth: 2 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' } },
