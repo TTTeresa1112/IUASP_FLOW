@@ -232,7 +232,7 @@ const pmConfig: Record<string, NodeConfig> = {
         { id: 'e4', source: 'n4', target: 'n5', label: '选择 EIC' , sourceHandle: 'right' },
         { id: 'e5-1', source: 'n5', target: 'n6', label: '通知', sourceHandle: 'right' },
         { id: 'e5-2', source: 'n5', target: 'n4', label: '驳回 重提', sourceHandle: 'top', style: { stroke: '#f43f5e', strokeWidth: 2 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' } },
-        { id: 'e6-1', source: 'n3', target: 'n8', label: '初审 ME', sourceHandle: 'top' },
+        { id: 'e6-1', source: 'n3', target: 'n8', label: '初审 AE', sourceHandle: 'top' },
         { id: 'e6-2', source: 'n9', target: 'n8', label: '驳回 重提', sourceHandle: 'top', style: { stroke: '#f43f5e', strokeWidth: 2 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f43f5e' } },
         { id: 'e7', source: 'n8', target: 'n9', label: '选择 AE' , sourceHandle: 'right' },
         { id: 'e8', source: 'n9', target: 'n11', sourceHandle: 'right' },
